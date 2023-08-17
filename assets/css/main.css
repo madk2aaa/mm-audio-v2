@@ -96,7 +96,7 @@ h1, h2, h3, h4, h5, h6 {
  * Links
  */
 a {
-  color: #4b534c;
+  color: #dbdfdc;
   text-decoration: none;
   transition: 0.2s;
 }
@@ -179,7 +179,7 @@ pre > code {
   vertical-align: middle;
 }
 .icon > svg path {
-  fill: #4b534c;
+  fill: #dbdfdc;
 }
 
 /********************
@@ -210,7 +210,7 @@ pre > code {
 }
 
 .welcome .slick .prompt {
-  background-color: #4b534c;
+  background-color: #dbdfdc;
   color: white;
   max-width: 450px;
   margin: 0 auto 0.5em auto;
@@ -253,7 +253,7 @@ pre > code {
 
 .styled-button {
   border: none;
-  background: #4b534c;
+  background: #dbdfdc;
   border-radius: 5px;
   color: #fafafa;
   padding: 0.5em 1em;
@@ -282,7 +282,7 @@ pre > code {
 }
 
 .slick-dots li.slick-active button:before {
-  color: #4b534c !important;
+  color: #dbdfdc !important;
   opacity: 1 !important;
 }
 
@@ -342,7 +342,7 @@ pre > code {
 
 .site-header {
   height: 96px;
-  background-color: #4b534c;
+  background-color: #dbdfdc;
   text-align: center;
 }
 
@@ -475,7 +475,7 @@ pre > code {
 }
 .post-list li a {
   margin: 5px;
-  background-color: #4b534c;
+  background-color: #dbdfdc;
   background-size: 100%;
   color: #fafafa;
   width: 64px;
@@ -498,7 +498,7 @@ pre > code {
 
 .post-meta {
   font-size: 17.5px;
-  color: #4b534c;
+  color: #dbdfdc;
 }
 
 .post-link {
@@ -700,13 +700,13 @@ Audio Player Styling
   float: right;
   line-height: 48px;
   vertical-align: top;
-  color: #4b534c;
+  color: #dbdfdc;
 }
 .player-buttons .player-buttons-next-number {
   float: left;
   line-height: 48px;
   vertical-align: top;
-  color: #4b534c;
+  color: #dbdfdc;
 }
 .player-buttons .player-buttons-prev {
   display: inline-block;
@@ -768,7 +768,7 @@ Audio Player Styling
   border-radius: 32px !important;
 }
 .jp-controls button.jp-play:hover {
-  border-color: #4b534c !important;
+  border-color: #dbdfdc !important;
 }
 
 .jp-state-playing button.jp-play {
