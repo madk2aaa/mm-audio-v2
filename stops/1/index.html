@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- place fav icons here -->
+
+  <title>Asia Art Archive 20 Years On｜Yan Wai Yin Winnie</title>
+  <meta name="description" content="A web-based audio guide theme for Jekyll.
+">
+
+  <!-- Twitter cards and OG Image for Facebook -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="" />
+  <meta name="twitter:creator" content="" />
+  <meta name="twitter:title" content="Asia Art Archive 20 Years On｜Yan Wai Yin Winnie" />
+  <meta name="twitter:description" content="A web-based audio guide theme for Jekyll.
+" />
+  
+  <meta name="og:image" content="http://localhost:4000/assets/img/meta/og-image.jpg" />
+  <meta name="twitter:image" content="http://localhost:4000/assets/img/meta/og-image.jpg" />
+
+  <!-- Canonical urls -->
+
+  <link rel="canonical" href="http://localhost:4000/stops/1/">
+  <link rel="alternate" type="application/rss+xml" title="Audio Guide" href="http://localhost:4000/feed.xml">
+
+  <!-- Stylesheets -->
+
+  <link rel="stylesheet" type="text/css" href="/assets/js/slick.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/js/slick-theme.css" />
+
+  <!-- jQuery -->
+  <script src="/assets/js/jquery-1.12.3.min.js"></script>
+  <script src="/assets/js/slick.min.js"></script>
+
+  <!-- jPlayer -->
+  <script src="/assets/js/jplayer/jquery.jplayer.min.js"></script>
+
+  <!-- CSS for this web app -->
+  <link rel='stylesheet' href='/assets/css/main.css?v=1.0.0.1'>
+
+  <script type="text/javascript">
+
+// The JS code here is render blocking. We liked it this way, but you might want to change it if this sort of thing
+// worries you. More info on this here: https://varvy.com/pagespeed/render-blocking.html
+// The advantage of render blocking the below code is to prevent some flicker on page-load to make the audio guide
+// feel a little more 'app-like', but you mightn't find it necessary.
+
+
+// add fixedPosition support check, pulled from jQuery Mobile
+// This isn't a true check, but just flagging browsers with known issues with fixed positioning.
+// This is preferable to attempting to do a real check given the current widespread support for
+// Fixed positioning, so the devices that still have problems with it are fairly well known
+
+function fixedPosition() {
+  var w = window,
+    ua = navigator.userAgent,
+    platform = navigator.platform,
+    // Rendering engine is Webkit, and capture major version
+    wkmatch = ua.match( /AppleWebKit\/([0-9]+)/ ),
+    wkversion = !!wkmatch && wkmatch[ 1 ],
+    ffmatch = ua.match( /Fennec\/([0-9]+)/ ),
+    ffversion = !!ffmatch && ffmatch[ 1 ],
+    operammobilematch = ua.match( /Opera Mobi\/([0-9]+)/ ),
+    omversion = !!operammobilematch && operammobilematch[ 1 ];
+
+  if (
+    // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
+    ( ( platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534 ) ||
+    // Opera Mini
+    ( w.operamini && ({}).toString.call( w.operamini ) === "[object OperaMini]" ) ||
+    ( operammobilematch && omversion < 7458 ) ||
+    //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
+    ( ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533 ) ||
+    // Firefox Mobile before 6.0 -
+    ( ffversion && ffversion < 6 ) ||
+    // WebOS less than 3
+    ( "palmGetResource" in window && wkversion && wkversion < 534 ) ||
+    // MeeGo
+    ( ua.indexOf( "MeeGo" ) > -1 && ua.indexOf( "NokiaBrowser/8.5.0" ) > -1 ) ) {
+    return false;
+  }
+
+  return true;
+}
+
+$.extend( $.support, {
+  fixedPosition: fixedPosition()
+});
+
+// fixed position audio player
+
+if ($.support.fixedPosition) {
+ $("<style>").prop("type", "text/css").html("\
+    .audio-footer-container { \
+      position: fixed; \
+    }")
+  .appendTo("head");
+}
+
+// Prevent links from opening in a new window when viewing from iOS home screen
+// Helps ensure a more 'web appy' expierence.
+// Adjusted from gist posted by Github user @irae on @kylebarrow's Gist at:
+// https://gist.github.com/kylebarrow/1042026
+// this snippet available at: https://gist.github.com/irae/1042167
+// It's a whole document event listener, so will continue to work even if other links are added to the DOM after
+// the initial pageload. The while loop ensures that it bubbles up to hit any anchor links that have been clicked.
+
+  (function(document,navigator,standalone) {
+    // prevents links from apps from oppening in mobile safari
+    // this javascript must be the first script in your <head>
+    if ((standalone in navigator) && navigator[standalone]) {
+      var curnode, location=document.location, stop=/^(a|html)$/i;
+      document.addEventListener('click', function(e) {
+        curnode=e.target;
+        
+        while (!(stop).test(curnode.nodeName)) {
+          curnode=curnode.parentNode;
+        }
+        // Condidions to do this only on links to your own app
+        // if you want all links, use if('href' in curnode) instead.
+        if (curnode.className.indexOf("dont-use-ios-override") == -1) {
+          if(
+            'href' in curnode && // is a link
+            (chref=curnode.href).replace(location.href,'').indexOf('#') && // is not an anchor
+            ( !(/^[a-z\+\.\-]+:/i).test(chref) ||                       // either does not have a proper scheme (relative links)
+              chref.indexOf(location.protocol+'//'+location.host)===0 ) // or is in the same protocol and domain
+          ) {
+            e.preventDefault();
+            location.href = curnode.href;
+          }
+        }
+      },false);
+    }
+  })(document,window.navigator,'standalone');
+
+// Initialise jPlayer, grabbed the MP3 source file from the audio element on the page.
+$(document).ready(function(){
+
+  $("#jquery_jplayer_1").jPlayer({
+    ready: function () {
+      $("#episode-element").hide();
+      $(this).jPlayer("setMedia", {
+        title: "",
+        mp3: $("#episode-source").attr("src")
+      });
+
+    },
+    swfPath: "/assets/js/jplayer",
+    supplied: "mp3",
+    wmode: "window",
+    useStateClassSkin: true,
+    autoBlur: false,
+    smoothPlayBar: true,
+    keyEnabled: true,
+    remainingDuration: true,
+    toggleDuration: true
+  });
+});
+
+  </script>
+    <!-- JS for this web app -->
+  <script src="/assets/js/main.js?v=1.0.0.1"></script>
+</head>
+
+
+  <body>
+    <!-- Google Tag Manager -->
+
+<!-- drop in your Google Tag Manager or Analytics snippet here! -->
+
+<!-- End Google Tag Manager -->
+    <header class="site-header">
+
+  <div class="site-header-wrapper">
+    
+    
+    <a class="site-header-back-button" href="/">
+      <img src="/assets/img/icons/button_back.png"/>
+    </a>
+    
+    <a class="site-title" href="/">
+      <img src="/assets/img/logo/audio-guide.png" alt="Audio Guide logo" class="site-logo"/>
+    </a>
+
+    <a class="site-header-menu-button dont-use-ios-override" href="/">
+      <img src="/assets/img/icons/menu_icon.png"/>
+    </a>
+
+  </div>
+
+</header>
+
+    <div class="slide-menu">
+  <h2>Select another stop</h2>
+  <ul class="post-list">
+    
+    <li>
+        <a class="post-link" href="/stops/1/" style="background-image: url('/assets/img/icons/headphones-dark.png');">
+          <span class="post-item">1</span>
+        </a>
+      </li><li>
+        <a class="post-link" href="/stops/2/" style="background-image: url('/assets/img/icons/headphones-dark.png');">
+          <span class="post-item">2</span>
+        </a>
+      </li><li>
+        <a class="post-link" href="/stops/3/" style="background-image: url('/assets/img/icons/headphones-dark.png');">
+          <span class="post-item">3</span>
+        </a>
+      </li>
+  </ul>
+</div>
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <div class="post-title-episode">
+      <div class="post-header-stop-id" style="background-image: url('/assets/img/icons/headphones-light.png');"><span>1</span></div>
+      
+        <h2 class="post-header-section-title">Introduction</h1>
+      
+      
+        <h3 class="post-header-title">Asia Art Archive 20 Years On｜Yan Wai Yin Winnie</h2>
+      
+    </div>
+  </header>
+  
+    <div class="slick-container post-hero-image-container">
+      <div class="slick-post-hero-image">
+        
+          <div class="post-hero-image">    
+            <img src="/assets/img/stops/11_Yan-Wai-Yin-Winnie.png" alt="First example photo for stop 1"/>
+          </div>
+        
+          <div class="post-hero-image">    
+            <img src="/assets/img/stops/12_Yan-Wai-Yin-Winnie.png" alt="Second example photo for stop 1"/>
+          </div>
+        
+          <div class="post-hero-image">    
+            <img src="/assets/img/stops/13_Yan-Wai-Yin-Winnie.png" alt="Second example photo for stop 1"/>
+          </div>
+        
+      </div>
+    </div>
+  
+  <div class="post-content">
+    <p>The standard Lorem Ipsum passage, used since the 1500s</p>
+
+<p>“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.”
+Section 1.10.32 of “de Finibus Bonorum et Malorum”, written by Cicero in 45 BC</p>
+
+<p>“Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?”
+1914 translation by H. Rackham</p>
+
+<p>“But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?”
+Section 1.10.33 of “de Finibus Bonorum et Malorum”, written by Cicero in 45 BC</p>
+
+<p>“At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.”
+1914 translation by H. Rackham</p>
+
+<p>“On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pai</p>
+
+<h2 id="person-speaking-second-level-heading">Person speaking (second level heading)</h2>
+
+<blockquote>
+  <p>And this blockquote is styled to make it clear that this section really is someone speaking.</p>
+</blockquote>
+
+<p>And we can go back to a normal transcript.</p>
+
+<h3 id="a-third-level-heading">A third level heading</h3>
+
+<p>The example audio used here is borrowed from <a href="https://www.youtube.com/watch?v=UtzavcTdFsk">Asia Art Archive 20 Years On｜Yan Wai Yin Winnie</a>. This is just a test clip, so you’ll need to replace it!</p>
+
+  </div>
+
+</article>
+
+  
+  
+  
+
+      </div>
+    </div>
+
+<div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
+  <div class="jp-gui jp-interface audio-footer-container" data-role="footer" data-position="fixed" data-tap-toggle="false">
+    <div class="audio-player">
+      
+      <div class="player-now-playing">
+        <p>
+        Asia Art Archive 20 Years On｜Yan Wai Yin Winnie
+        </p>
+      </div>
+
+      
+      <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+      <div id="episode-element">
+        <audio>
+          <source id="episode-source" src="/audio/Yan-Wai-Yin-Winnie.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <div class="jp-progress">
+        <div class="jp-seek-bar">
+          <div class="jp-play-bar"></div>
+        </div>
+      </div>
+          
+      <div class="jp-no-solution">
+        <span>Update Required</span>
+        To play audio, be sure to enable JavaScript, and run a browser that supports HTML5 MP3 audio, or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+      </div>
+
+      
+      
+      <div class="player-buttons">
+        <div class="player-buttons-prev">
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+        </div>
+
+        
+        <div class="jp-controls" style="display: inline-block; text-align: center;">
+          <button class="jp-play" role="button" tabindex="0" style="display: inline-block;"></button>
+        </div>
+        
+
+        <div class="player-buttons-next">
+          
+            
+            
+            
+          
+            
+            
+            
+              <a href="/stops/2/"></a>
+              <span class="player-buttons-next-number">2</span>
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+            
+            
+            
+          
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  </div>
+
+  </body>
+
+</html>
